@@ -18,22 +18,16 @@ class Node {
 */
 
 class Solution {
+    List<Integer> answer = new ArrayList<>();
     
     public List<Integer> postorder(Node root) {
-        List<Integer> answer = new ArrayList<>();
         if (root == null) return answer;
         
-        Stack<Node> stack = new Stack<>();
-        stack.add(root);
-        
-        while(!stack.isEmpty()) {
-            root = stack.pop();
-            answer.add(root.val);
-            for(Node node: root.children) {
-                stack.add(node);
-            }
+        for(Node node: root.children) {
+            postorder(node);
         }
-        Collections.reverse(answer);
+        
+        answer.add(root.val);
         return answer;
     }
 }
