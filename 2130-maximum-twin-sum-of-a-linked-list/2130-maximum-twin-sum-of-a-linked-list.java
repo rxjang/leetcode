@@ -10,23 +10,56 @@
  */
 class Solution {
     public int pairSum(ListNode head) {
-        List<Integer> list = new ArrayList<>();
         
-        while(true) {
-            list.add(head.val);
-            head = head.next;
-            if (head == null) {
-                break;
-            }
+        int size = size(head);
+        int point = size / 2;
+        
+        ListNode curr = head;
+        for (int i = 0; i < point - 1; i++) {
+            curr = curr.next;
         }
+        ListNode x = curr.next;
+        curr.next = null;
+        ListNode end = reverse(x);
         
-        int size = list.size();
         int answer = 0;
-        for (int i = 0; i < size / 2; i++) {
-            int sum = list.get(i) + list.get(size - 1 - i);
+        while (head != null) {
+            int sum = head.val + end.val;
             answer = Math.max(answer, sum);
+            head = head.next;
+            end = end.next;
         }
         
         return answer;
+    }
+    
+    public ListNode reverse(ListNode head) {
+        if (head == null) return null;
+        
+        ListNode a = head;
+        ListNode b = head.next;
+        
+        if (b == null) {
+            return head;
+        }
+        
+        ListNode c = b.next;
+        a.next = null;
+        
+        while (c != null) {
+            b.next = a;
+            a = b;
+            b = c;
+            c = c.next;
+        }
+        b.next = a;
+        return b;
+    }
+    
+    public int size(ListNode head) {
+        if (head == null) 
+            return 0;
+        
+        return 1 + size(head.next);
     }
 }
