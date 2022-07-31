@@ -14,31 +14,28 @@
  * }
  */
 class Solution {
-    public TreeNode constructMaximumBinaryTree(int[] nums) {
-        
-        if (nums.length < 1) return null;
-        
-        int index = findLargestNumber(nums);
-        TreeNode root = new TreeNode(nums[index]);
-        root.left = constructMaximumBinaryTree(
-            Arrays.copyOfRange(nums, 0, index)
-        );
-        root.right = constructMaximumBinaryTree(
-            Arrays.copyOfRange(nums, index + 1, nums.length)
-        );
-        return root;
-    }
     
-    public int findLargestNumber(int[] nums) {
-        int largest = 0;
-        int index = 0;
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        Stack<TreeNode> stack = new Stack<>();
         
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] > largest) {
-                index = i;
-                largest = nums[i];
+        for(int i = 0; i < nums.length; i ++) {
+            
+            TreeNode node = new TreeNode(nums[i]);
+            while(!stack.isEmpty() && stack.peek().val < node.val) {
+                node.left = stack.pop();
             }
+            if(!stack.isEmpty()) {
+                stack.peek().right = node;
+            }
+            stack.push(node);
         }
-        return index;
+        
+        TreeNode res = stack.pop();
+        
+        while(!stack.isEmpty()) {
+            res = stack.pop();
+        }
+        
+        return res;
     }
 }
